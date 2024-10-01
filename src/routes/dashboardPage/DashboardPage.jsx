@@ -1,5 +1,6 @@
 
 import "./dashboardPage.css";
+
 const DashboardPage = () => {
 
     return (
