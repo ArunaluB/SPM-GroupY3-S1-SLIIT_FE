@@ -1,10 +1,13 @@
-/* eslint-disable no-unused-vars */
-import React from 'react'
 
-const signUpPage = () => {
+import { SignUp } from "@clerk/clerk-react";
+import "./signUpPage.css";
+
+const SignUpPage = () => {
   return (
-    <div>signUpPage</div>
-  )
-}
+    <div className="signUpPage">
+      <SignUp path="/sign-up" signInUrl="sign-in" />
+    </div>
+  );
+};
 
-export default signUpPage
+export default SignUpPage;
