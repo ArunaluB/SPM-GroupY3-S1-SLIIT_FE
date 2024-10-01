@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.9.4",
+    "@google/generative-ai": "^0.20.0",
+    "client": "file:",
     "dotenv": "^16.4.5",
     "imagekitio-react": "^4.2.0",
     "react": "^18.3.1",
