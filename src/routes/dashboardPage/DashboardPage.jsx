@@ -6,9 +6,17 @@ const DashboardPage = () => {
         e.preventDefault();
         const text = e.target.text.value;
         if (!text) return;
-    
-       
-      };
+
+        return fetch(`${import.meta.env.VITE_API_URL}/api/chats`, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ text }),
+        }).then((res) => res.json());
+
+    };
     return (
         <div className="dashboardPage">
             <div className="texts">
@@ -32,7 +40,7 @@ const DashboardPage = () => {
                 </div>
             </div>
             <div className="formContainer">
-                <form  onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit}>
                     <input type="text" name="text" placeholder="Ask me anything..." />
                     <button>
                         <img src="/arrow.png" alt="" />
