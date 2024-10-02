@@ -1,15 +1,15 @@
-/* eslint-disable no-unused-vars */
-import React from 'react'
-import "./newPrompt.css"
+/* eslint-disable react/prop-types */
 import { useEffect, useRef, useState } from "react";
+import "./newPrompt.css";
+import Upload from "../upload/Upload";
 import { IKImage } from "imagekitio-react";
-import Upload from '../upload/Upload';
 import model from "../../lib/gemini";
 import Markdown from "react-markdown";
-const NewPrompt = () => {
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+const NewPrompt = ({ data }) => {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
-
   const [img, setImg] = useState({
     isLoading: false,
     error: "",
@@ -17,60 +17,111 @@ const NewPrompt = () => {
     aiData: {},
   });
 
-  const chat = model.startChat({
-    history: [
-      {
-        role: "user",
-        parts: [{ text: "Hello" }],
-      },
-      {
-        role: "model",
-        parts: [{ text: "Great to meet you. What would you like to know?" }],
-      },
-    ],
-    generationConfig: {
-      // maxOutputTokens: 1024,
-    }
-  });
+  const queryClient = useQueryClient();
   const endRef = useRef(null);
+  const formRef = useRef(null);
+
+  // Check if there's valid history and if the first entry has the role 'user'
+  const history = data?.history?.length
+    ? data.history.map(({ role, parts }) => ({
+        role,
+        parts: [{ text: parts[0].text }],
+      }))
+    : [];
+
+  // Initialize chat if the first entry in history is from the 'user'
+  const chat = history.length && history[0].role === "user"
+    ? model.startChat({
+        history,
+        generationConfig: {
+          // maxOutputTokens: 100,
+        },
+      })
+    : null;
 
   useEffect(() => {
-    endRef.current.scrollIntoView({ behavior: "smooth" });
-  }, [question, answer, img.dbData]);
+    if (endRef.current) {
+      endRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [data, question, answer, img.dbData]);
 
+  const mutation = useMutation({
+    mutationFn: () => {
+      return fetch(`${import.meta.env.VITE_API_URL}/api/chats/${data._id}`, {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          question: question.length ? question : undefined,
+          answer,
+          img: img.dbData?.filePath || undefined,
+        }),
+      }).then((res) => res.json());
+    },
+    onSuccess: () => {
+      queryClient
+        .invalidateQueries({ queryKey: ["chat", data._id] })
+        .then(() => {
+          formRef.current.reset();
+          setQuestion("");
+          setAnswer("");
+          setImg({
+            isLoading: false,
+            error: "",
+            dbData: {},
+            aiData: {},
+          });
+        });
+    },
+    onError: (err) => {
+      console.log(err);
+    },
+  });
 
-  const add = async (text) => {
+  const add = async (text, isInitial) => {
+    if (!isInitial) setQuestion(text);
+
     try {
-      setQuestion(text);
-      // const result = await model.generateContent(text);
-      const result = await model.generateContentStream(Object.entries(img.aiData).length ? [img.aiData, text] : [text]);
-
-      let accumulator = "";
-      try {
+      if (chat) {
+        const result = await chat.sendMessageStream(
+          Object.entries(img.aiData).length ? [img.aiData, text] : [text]
+        );
+        let accumulatedText = "";
         for await (const chunk of result.stream) {
           const chunkText = chunk.text();
           console.log(chunkText);
-          accumulator += chunkText;
-          setAnswer(accumulator);
+          accumulatedText += chunkText;
+          setAnswer(accumulatedText);
         }
-      } catch (error) {
-        console.error("Error while streaming:", error);
-        setAnswer("Sorry, something went wrong.");
-      }
 
-    } catch (error) {
-      console.error("Error fetching response:", error);
-      setAnswer("Sorry, something went wrong. Please try again.");
+        mutation.mutate();
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const text = e.target.text.value;
     if (!text) return;
-    add(text);
+
+    add(text, false);
   };
+
+  // IN PRODUCTION WE DON'T NEED IT
+  const hasRun = useRef(false);
+
+  useEffect(() => {
+    if (!hasRun.current && data?.history?.length === 1) {
+      add(data.history[0].parts[0].text, true);
+    }
+    hasRun.current = true;
+  }, []);
+
   return (
     <>
       {/* ADD NEW CHAT */}
@@ -90,7 +141,7 @@ const NewPrompt = () => {
         </div>
       )}
       <div className="endChat" ref={endRef}></div>
-      <form className="newForm" onSubmit={handleSubmit} >
+      <form className="newForm" onSubmit={handleSubmit} ref={formRef}>
         <Upload setImg={setImg} />
         <input id="file" type="file" multiple={false} hidden />
         <input type="text" name="text" placeholder="Ask anything..." />
@@ -99,7 +150,7 @@ const NewPrompt = () => {
         </button>
       </form>
     </>
-  )
-}
+  );
+};
 
-export default NewPrompt
+export default NewPrompt;
