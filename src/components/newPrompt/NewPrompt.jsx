@@ -5,25 +5,71 @@ import { useEffect, useRef, useState } from "react";
 import { IKImage } from "imagekitio-react";
 import Upload from '../upload/Upload';
 import model from "../../lib/gemini";
+import Markdown from "react-markdown";
 const NewPrompt = () => {
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
+
   const [img, setImg] = useState({
     isLoading: false,
     error: "",
     dbData: {},
     aiData: {},
   });
+
+  const chat = model.startChat({
+    history: [
+      {
+        role: "user",
+        parts: [{ text: "Hello" }],
+      },
+      {
+        role: "model",
+        parts: [{ text: "Great to meet you. What would you like to know?" }],
+      },
+    ],
+    generationConfig: {
+      // maxOutputTokens: 1024,
+    }
+  });
   const endRef = useRef(null);
 
   useEffect(() => {
     endRef.current.scrollIntoView({ behavior: "smooth" });
-  }, []);
- 
-  const add = async () => {
-    const prompt = "write a react js";
-    const result = model.generateContent(prompt);
-    const response = (await result).response;
-    const text = response.text();
-    console.log(text);
+  }, [question, answer, img.dbData]);
+
+
+  const add = async (text) => {
+    try {
+      setQuestion(text);
+      // const result = await model.generateContent(text);
+      const result = await model.generateContentStream(Object.entries(img.aiData).length ? [img.aiData, text] : [text]);
+
+      let accumulator = "";
+      try {
+        for await (const chunk of result.stream) {
+          const chunkText = chunk.text();
+          console.log(chunkText);
+          accumulator += chunkText;
+          setAnswer(accumulator);
+        }
+      } catch (error) {
+        console.error("Error while streaming:", error);
+        setAnswer("Sorry, something went wrong.");
+      }
+
+    } catch (error) {
+      console.error("Error fetching response:", error);
+      setAnswer("Sorry, something went wrong. Please try again.");
+    }
+  };
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const text = e.target.text.value;
+    if (!text) return;
+    add(text);
   };
   return (
     <>
@@ -37,8 +83,14 @@ const NewPrompt = () => {
           transformation={[{ width: 380 }]}
         />
       )}
+      {question && <div className="message user">{question}</div>}
+      {answer && (
+        <div className="message">
+          <Markdown>{answer}</Markdown>
+        </div>
+      )}
       <div className="endChat" ref={endRef}></div>
-      <form className="newForm" >
+      <form className="newForm" onSubmit={handleSubmit} >
         <Upload setImg={setImg} />
         <input id="file" type="file" multiple={false} hidden />
         <input type="text" name="text" placeholder="Ask anything..." />
