@@ -24,8 +24,50 @@
         overflow: scroll;
     }
 
-     /* Hiding scrollbar in Webkit-based browsers (Chrome, Safari) */
-     .list::-webkit-scrollbar {
+    .chat-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px;
+        border-radius: 5px;
+        position: relative;
+        margin-bottom: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .chat-item:hover {
+        background-color: #2c2937;
+        color: white;
+    }
+
+
+
+    .delete-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        margin-left: 10px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .chat-item:hover .delete-button {
+        opacity: 1;
+    }
+
+    .delete-button svg {
+        width: 16px;
+        height: 16px;
+        color: #ff6b6b;
+    }
+
+    .delete-button:hover svg {
+        color: #ff4a4a;
+    }
+
+    /* Hiding scrollbar in Webkit-based browsers (Chrome, Safari) */
+    .list::-webkit-scrollbar {
         display: none;
     }
 
