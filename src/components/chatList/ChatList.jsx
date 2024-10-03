@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-vars */
 import { Link } from "react-router-dom";
 import "./chatList.css";
-import { useQuery } from "@tanstack/react-query";
+import { Trash } from "lucide-react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 const ChatList = () => {
-
+    const queryClient = useQueryClient();
     const { isPending, error, data } = useQuery({
         queryKey: ["userChats"],
         queryFn: () =>
@@ -11,6 +12,25 @@ const ChatList = () => {
                 credentials: "include",
             }).then((res) => res.json()),
     });
+
+   
+   // Mutation to delete a chat
+   const deleteChatMutation = useMutation({
+    mutationFn: (chatId) =>
+        fetch(`${import.meta.env.VITE_API_URL}/api/chats/${chatId}`, {
+            method: "DELETE",
+            credentials: "include",
+        }),
+    onSuccess: () => {
+        // Invalidate and refetch userChats after deletion
+        queryClient.invalidateQueries(["userChats"]);
+    },
+});
+
+// Handle delete button click
+const handleDelete = (chatId) => {
+    deleteChatMutation.mutate(chatId);
+};
 
     return (
         <div className="chatList">
@@ -26,9 +46,15 @@ const ChatList = () => {
                     : error
                         ? "Something went wrong!"
                         : data?.map((chat) => (
-                            <Link to={`/dashboard/chats/${chat._id}`} key={chat._id}>
-                                {chat.title}
-                            </Link>
+                            <div className="chat-item" key={chat._id}>
+                                <Link to={`/dashboard/chats/${chat._id}`}>{chat.title}</Link>
+                                <button
+                                    className="delete-button"
+                                    onClick={() => handleDelete(chat._id)}
+                                >
+                                    <Trash size={16} />
+                                </button>
+                            </div>
                         ))}
             </div>
             <hr />
