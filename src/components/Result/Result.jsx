@@ -7,6 +7,7 @@ function Result() {
   const { score, selectedAnswers } = location.state;
 
   return (
+    <div className="result-page">
     <div className="result-container">
       <h2>Your Score: {score} / 30</h2>
       <h3>Answers:</h3>
@@ -35,6 +36,7 @@ function Result() {
       <Link to="/" className="home-button">
         Go Home
       </Link>
+    </div>
     </div>
   );
 }

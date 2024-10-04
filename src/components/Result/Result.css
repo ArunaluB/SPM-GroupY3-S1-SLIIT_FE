@@ -3,17 +3,15 @@
     border-radius: 10px;
     background-color: #000000;
     max-width: 500px;
-    margin: 0 auto; 
+    margin: 60px auto; 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 75px auto;
-   
 }
+
 .result-page {
     display: flex;
     justify-content: center; 
-    align-items: center; 
+    align-items: flex-start; 
     min-height: 100vh; 
-    background-color: #12101b;
 }
 
 .result-container h2,

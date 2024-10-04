@@ -64,17 +64,17 @@
     font-size: 1.2rem;
   }
   .quiz-header {
-    display: flex; /* Enable Flexbox */
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-    height: 100vh; /* Take full height of the viewport */
-    flex-direction: column; /* Stack children vertically */
+    display: flex; 
+    justify-content: center;
+    align-items: center; 
+    height: 100vh; 
+    flex-direction: column;
     border-radius: 10px;
     padding: 20px;
     text-align: center;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
-    transform: translateY(-60px); /* Move upwards */
+    transform: translateY(-60px);
 }
 
   
