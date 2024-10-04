@@ -37,7 +37,7 @@ const handleDelete = (chatId) => {
             <span className="title">DASHBOARD</span>
             <Link to="/dashboard">Create a new Chat</Link>
             <Link to="/">Explore Pro Menter</Link>
-            <Link to="/">Contact</Link>
+            <Link to="/quiz">Quiz</Link>
             <hr />
             <span className="title">RECENT CHATS</span>
             <div className="list">
