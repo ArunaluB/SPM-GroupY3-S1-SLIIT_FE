@@ -29,7 +29,7 @@ const DashboardPage = () => {
     const imageMutation = useMutation({
         mutationFn: () => {
             return fetch(`${import.meta.env.VITE_API_URL}/api/generate-report`, {
-                method: "POST",
+                method: "GET",
                 credentials: "include",
                 headers: {
                     "Content-Type": "application/json",

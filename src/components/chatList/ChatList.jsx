@@ -13,24 +13,24 @@ const ChatList = () => {
             }).then((res) => res.json()),
     });
 
-   
-   // Mutation to delete a chat
-   const deleteChatMutation = useMutation({
-    mutationFn: (chatId) =>
-        fetch(`${import.meta.env.VITE_API_URL}/api/chats/${chatId}`, {
-            method: "DELETE",
-            credentials: "include",
-        }),
-    onSuccess: () => {
-        // Invalidate and refetch userChats after deletion
-        queryClient.invalidateQueries(["userChats"]);
-    },
-});
 
-// Handle delete button click
-const handleDelete = (chatId) => {
-    deleteChatMutation.mutate(chatId);
-};
+    // Mutation to delete a chat
+    const deleteChatMutation = useMutation({
+        mutationFn: (chatId) =>
+            fetch(`${import.meta.env.VITE_API_URL}/api/chats/${chatId}`, {
+                method: "DELETE",
+                credentials: "include",
+            }),
+        onSuccess: () => {
+            // Invalidate and refetch userChats after deletion
+            queryClient.invalidateQueries(["userChats"]);
+        },
+    });
+
+    // Handle delete button click
+    const handleDelete = (chatId) => {
+        deleteChatMutation.mutate(chatId);
+    };
 
     return (
         <div className="chatList">
@@ -58,15 +58,20 @@ const handleDelete = (chatId) => {
                         ))}
             </div>
             <hr />
-            <Link to="/base" className="start-button">
-             <div className="upgrade">
-                <img src="/logo.png" alt="" />
+
+            <div className="upgrade">
+                <Link to="/base" >
+                    <img src="/logo.png" alt="" />
+                </Link>
+
                 <div className="texts">
                     <span>Start to Learning</span>
                     <span>Create Your Code Block</span>
+                    <Link />
                 </div>
             </div>
-            </Link>
+
+
         </div>
     );
 };
