@@ -24,6 +24,33 @@ const DashboardPage = () => {
             navigate(`/dashboard/chats/${id}`);
         },
     });
+    
+    // Mutation for image analysis and PDF generation
+    const imageMutation = useMutation({
+        mutationFn: () => {
+            return fetch(`${import.meta.env.VITE_API_URL}/api/generate-report`, {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }).then((res) => res.blob()); // Expecting a PDF as a blob
+        },
+        onSuccess: (blob) => {
+            // Create a link to download the PDF file
+            const url = window.URL.createObjectURL(new Blob([blob]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", "report.pdf");
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link); // Clean up
+        },
+    });
+     // Handle image analysis click
+     const handleImageAnalysis = () => {
+        imageMutation.mutate();
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -44,9 +71,9 @@ const DashboardPage = () => {
                         <img src="/chat.png" alt="" />
                         <span>Create a New Chat</span>
                     </div>
-                    <div className="option">
+                      <div className="option" onClick={handleImageAnalysis}>
                         <img src="/image.png" alt="" />
-                        <span>Analyze Images</span>
+                        <span>Analyze Report </span>
                     </div>
                     <div className="option">
                         <img src="/code.png" alt="" />
