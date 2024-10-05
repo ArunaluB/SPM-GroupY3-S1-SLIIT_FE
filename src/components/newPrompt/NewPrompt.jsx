@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { useEffect, useRef, useState } from "react";
 import "./newPrompt.css";
@@ -16,7 +17,21 @@ const NewPrompt = ({ data }) => {
     dbData: {},
     aiData: {},
   });
+  const Prompt = `Analyze the following code and provide step-by-step feedback. Start by explaining the code’s functionality, followed by identifying syntax, logical, and common errors. For each error found, explain the cause and suggest a method for fixing it. After fixing each error, explain how the corrected code improves functionality. Additionally, estimate the error percentage breakdown (syntax, common, logical), and provide suggestions for best practices and optimizations, including the use of appropriate data structures. Complete the correct code base—explanation of code functionality.  Finally, give references to documentation or YouTube videos that can further assist in understanding and improving the code.
 
+Once completed, return the output in a well-structured  with clear sections for code explanation, error identification and correction, best practices, and recommendations.`;
+  // Function to check if the input contains code (simple check for now)
+  const isCodeInput = (input) => {
+    return (
+      input.includes("function") ||
+      input.includes("const") ||
+      input.includes("let") ||
+      input.includes("return") ||
+      input.includes("import") ||
+      input.includes("export") ||
+      input.includes("app")
+    );
+  };
   const queryClient = useQueryClient();
   const endRef = useRef(null);
   const formRef = useRef(null);
@@ -24,19 +39,19 @@ const NewPrompt = ({ data }) => {
   // Check if there's valid history and if the first entry has the role 'user'
   const history = data?.history?.length
     ? data.history.map(({ role, parts }) => ({
-        role,
-        parts: [{ text: parts[0].text }],
-      }))
+      role,
+      parts: [{ text: parts[0].text }],
+    }))
     : [];
 
   // Initialize chat if the first entry in history is from the 'user'
   const chat = history.length && history[0].role === "user"
     ? model.startChat({
-        history,
-        generationConfig: {
-          // maxOutputTokens: 100,
-        },
-      })
+      history,
+      generationConfig: {
+        // maxOutputTokens: 100,
+      },
+    })
     : null;
 
   useEffect(() => {
@@ -109,7 +124,10 @@ const NewPrompt = ({ data }) => {
     const text = e.target.text.value;
     if (!text) return;
 
-    add(text, false);
+    const finalText = isCodeInput(text) ? text + Prompt : text;
+    console.log("aaaaaaaaaaaaaaaaaaaaa", finalText);
+
+    add(finalText, false);
   };
 
   // IN PRODUCTION WE DON'T NEED IT
