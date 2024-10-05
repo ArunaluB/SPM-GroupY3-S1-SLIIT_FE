@@ -1,0 +1,221 @@
+/* src/pages/BasePage.module.css */
+
+.appContainer {
+  display: flex;
+  height: 100vh;
+  padding: 20px;
+  gap: 20px;
+  background-color: rgba(83, 83, 83, 0.531);
+  background-image: url('background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.section {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.sectionHeader {
+  margin-bottom: 15px;
+  color: #2c3e50;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 10px;
+}
+
+.codeBlocks {
+  flex: 1;
+  overflow-y: auto;
+  font-size: 18px;
+  background-color: #031725ed;
+  color: rgb(255, 255, 255);
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.codeBlocksHeader {
+  font-size: 25px;
+  color: #fffbfb;
+}
+
+.codeBlocksContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+}
+
+.codeBlock {
+  padding: 25px 20px;
+  background-color: #054369;
+  color: white;
+  border-radius: 4px;
+  cursor: move;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+
+.codeBlock:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.inputBlock {
+  background-color: #2ecc71;
+}
+
+.workbench {
+  flex: 2;
+  height: calc(100vh - 40px);
+  overflow: auto;
+  background-color: #031725ed;
+  position: relative;
+  color: white;
+  text-align: center;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.workbenchHeader {
+  color: #fffbfb;
+}
+
+.workbenchGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 80px);
+  grid-auto-rows: 80px;
+  gap: 1px;
+  padding: 1px;
+}
+
+.workbenchBlock {
+  background-color: #083f63;
+  color: white;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
+  position: relative;
+  cursor: move;
+  transition: all 0.2s ease;
+}
+
+.workbenchBlock:hover {
+  box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+}
+
+.workbenchBlockInput {
+  background-color: #2ecc71;
+}
+
+.blockInput {
+  width: 90%;
+  background: transparent;
+  border: none;
+  color: white;
+  text-align: center;
+  font-size: 18px;
+}
+
+.removeButton {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background-color: rgba(255, 215, 210, 0);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.removeButton:hover {
+  color: black;
+  background-color: #ffffff;
+}
+
+.infoSection {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  background-color: #031725ed;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.infoHeader {
+  color: #ffffff;
+}
+
+.infoParagraph {
+  color: white;
+  margin-bottom: 10px;
+}
+
+.infoLink {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.infoLink:hover {
+  text-decoration: underline;
+}
+
+.syntaxBlock {
+  background-color: #f4f4f4;
+  padding: 10px;
+  border-radius: 4px;
+  font-family: 'Courier New', Courier, monospace;
+  white-space: pre-wrap;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+  color: black;
+}
+
+.videoPlayer {
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+  width: 270px;
+  height: 200px;
+}
+
+.checkButton {
+  margin-top: 20px;
+  background-color: white;
+  color: black;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.checkButton:hover {
+  background-color: #f0f0f0;
+  border-color: #888;
+}
+
+@media (max-width: 768px) {
+  .appContainer {
+    flex-direction: column;
+  }
+
+  .section {
+    width: 100%;
+  }
+}
