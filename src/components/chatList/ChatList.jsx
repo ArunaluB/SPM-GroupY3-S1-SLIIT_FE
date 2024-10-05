@@ -58,13 +58,15 @@ const handleDelete = (chatId) => {
                         ))}
             </div>
             <hr />
-            <div className="upgrade">
+            <Link to="/base" className="start-button">
+             <div className="upgrade">
                 <img src="/logo.png" alt="" />
                 <div className="texts">
-                    <span>Upgrade to Lama AI Pro</span>
-                    <span>Get unlimited access to all features</span>
+                    <span>Start to Learning</span>
+                    <span>Create Your Code Block</span>
                 </div>
             </div>
+            </Link>
         </div>
     );
 };

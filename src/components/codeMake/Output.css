@@ -1,0 +1,26 @@
+/* Output.css */
+.output-container {
+    background-color: #031725ed; /* Background color */
+    color: white; /* Text color */
+    border-radius: 12px; /* Rounded corners */
+    padding: 20px; /* Padding around the content */
+    max-width: 800px; /* Maximum width of the container */
+    margin: 20px auto; /* Centering the container */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+}
+
+h1 {
+    font-size: 2em; /* Heading size */
+    margin-bottom: 10px;
+    text-align: center; /* Space below the heading */
+}
+
+pre {
+    background-color: #1a2b3d; /* Background color for code and AI response */
+    padding: 15px; /* Padding inside the code block */
+    border-radius: 8px; /* Rounded corners for the code block */
+    overflow-x: auto; /* Enable horizontal scrolling if needed */
+    white-space: pre-wrap; /* Preserve white space and wrap long lines */
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.2em; /* Monospace font for code */
+}
